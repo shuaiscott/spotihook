@@ -1,8 +1,9 @@
 from datetime import datetime
 from dotenv import load_dotenv
-from iron_cache import *
 import json
 import os
+import redisshelve
+import redis
 import requests
 from string import Template
 import schedule
@@ -31,22 +32,17 @@ def spotihook():
     playlist = sp.playlist(PLAYLIST_ID)
     snapshot_id = playlist['snapshot_id']
     grab_time = datetime.utcnow()
-    try:
-        last_snapshot_id = cache.get(cache='spotihook', key='snapshot_id')
-    except:
-        last_snapshot_id = None
 
-    if last_snapshot_id is None:
+    if 'snapshot_id' not in dict:
         # Initializing, we need to ignore all songs up to this moment
         # Save the snapshot id and timestamp
-        cache.put(cache='spotihook', key='snapshot_id', value=snapshot_id)
-        cache.put(cache='spotihook', key='snapshot_timestamp', value=grab_time)
-        return
+        dict['snapshot_id'] = snapshot_id
+        dict['snapshot_timestamp'] = grab_time
 
-    if last_snapshot_id != snapshot_id:
+    if dict['snapshot_id'] != snapshot_id:
         # Playlist changed, we need to detect new songs
-        print(f"New snapshot detected. Processing changes ({last_snapshot_id} => {snapshot_id})")
-        last_sync = cache.get(cache='spotihook', key='snapshot_timestamp')
+        print(f"New snapshot detected. Processing changes ({dict['snapshot_id']} => {snapshot_id})")
+        last_sync = dict['snapshot_timestamp']
         if 'tracks' in playlist and 'items' in playlist['tracks']:
             for item in playlist['tracks']['items']:
                 # Format: 2021-05-07T03:04:24Z
@@ -107,15 +103,15 @@ def spotihook():
                         print(f"Successfully submitted webhook for {item['track']['artists'][0]['name']} - {item['track']['name']}")
 
             # Save the snapshot id and timestamp
-            cache.put(cache='spotihook', key='snapshot_id', value=snapshot_id)
-            cache.put(cache='spotihook', key='snapshot_timestamp', value=grab_time)
-
+            dict['snapshot_id'] = snapshot_id
+            dict['snapshot_timestamp'] = grab_time
     else:
         print(f"No changes detected @ {grab_time}")
 
 
 # MAIN
-cache = IronCache()
+r = redis.from_url(os.environ.get("REDIS_URL"))
+dict = redisshelve.RedisShelf(redis=r)
 
 # Run
 spotihook()
