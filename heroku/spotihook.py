@@ -6,7 +6,6 @@ import redisshelve
 import redis
 import requests
 from string import Template
-import schedule
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
 import sys
