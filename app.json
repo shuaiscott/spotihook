@@ -1,0 +1,49 @@
+{
+  "name": "Spotihook",
+  "description": "Webhook kickoff for Spotify",
+  "repository": "https://github.com/shuaiscott/spotihook",
+  "logo": "https://via.placeholder.com/150",
+  "keywords": ["python","scheduled","spotify"],
+  "addons": [
+    "heroku-redis:hobby-dev",
+    "scheduler:standard"
+  ],
+  "env": {
+    "CLIENT_ID": {
+      "description": "Spotify App Client ID",
+      "required": true
+    },
+    "CLIENT_SECRET": {
+      "description": "Spotify App Client Secret",
+      "required": true
+    },
+    "PLAYLIST_ID": {
+      "description": "Spotify Playlist ID to watch",
+      "required": true
+    },
+    "WEBHOOK_URL_TEMPLATE": {
+      "description": "URL to call when a new item is added. Supports $variable replacement",
+      "required": true
+    },
+    "WEBHOOK_METHOD": {
+      "description": "HTTP Method for the Webhook",
+      "value": "POST",
+      "required": true
+    },
+    "WEBHOOK_CONTENT_TYPE": {
+      "description": "Content-Type of the Webhook. Supports 'JSON' or 'FORM'",
+      "value": "JSON",
+      "required": true
+    },
+    "WEBHOOK_BODY_TEMPLATE": {
+      "description": "Optional HTTP body for the Webhook. Supports $variable replacement",
+      "value": "",
+      "required": false
+    },
+    "DEBUG": {
+      "description": "Turns on Debug logging",
+      "value": "False",
+      "required": false
+    }
+  }
+}

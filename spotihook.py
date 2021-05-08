@@ -2,12 +2,12 @@ from datetime import datetime
 from dotenv import load_dotenv
 import json
 import os
+import redisshelve
+import redis
 import requests
 from string import Template
-import schedule
 import spotipy
 from spotipy.oauth2 import SpotifyClientCredentials
-from sqlitedict import SqliteDict
 import sys
 import time
 
@@ -109,22 +109,8 @@ def spotihook():
 
 
 # MAIN
-dict = SqliteDict('./spotihook.db', autocommit=True)
+r = redis.from_url(os.environ.get("REDIS_URL"))
+dict = redisshelve.RedisShelf(redis=r)
 
-# Inital Run
+# Run
 spotihook()
-
-# Schedule it
-if DELAY_UNIT.upper() in ['SECOND', 'SECONDS']:
-    schedule.every(DELAY_AMOUNT).seconds.do(spotihook)
-elif DELAY_UNIT.upper() in ['MINUTE', 'MINUTES']:
-    schedule.every(DELAY_AMOUNT).minutes.do(spotihook)
-elif DELAY_UNIT.upper() in ['HOUR', 'HOURS']:
-    schedule.every(DELAY_AMOUNT).hours.do(spotihook)
-
-while True:
-    schedule.run_pending()
-    time.sleep(1)
-
-# Close DB when done
-dict.close()
