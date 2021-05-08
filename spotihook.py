@@ -59,6 +59,7 @@ def spotihook():
                     data['album_id'] = item['track']['album']['id']
                     data['album_name'] = item['track']['album']['name']
                     data['album_type'] = item['track']['album']['album_type']
+                    data['album_artwork_url'] = item['track']['album']['images'][0]
                     if 'isrc' in item['track']['external_ids']: data['isrc'] = item['track']['external_ids']['isrc']
 
                     # Submit Webhook Request
