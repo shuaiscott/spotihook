@@ -114,7 +114,7 @@ Simply add `$variable` on your string from the list below, and the script will r
 ### Example
 ```
 http://awesome.webhook.com/notify?title=$track_name&artist=$artist_name
-```|
+```
 
 <!-- ROADMAP -->
 ## Roadmap
