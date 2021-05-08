@@ -1,20 +1,3 @@
-<!-- PROJECT SHIELDS -->
-<!--
-*** I'm using markdown "reference style" links for readability.
-*** Reference links are enclosed in brackets [ ] instead of parentheses ( ).
-*** See the bottom of this document for the declaration of the reference variables
-*** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
-*** https://www.markdownguide.org/basic-syntax/#reference-style-links
-
-[![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
-[![MIT License][license-shield]][license-url]
-[![LinkedIn][linkedin-shield]][linkedin-url]
--->
-
-
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
@@ -69,7 +52,6 @@ services:
   
   #### Docker
   ```sh
-docker run \
 TODO
   ```
 
@@ -91,14 +73,48 @@ python spotihook.py
 
 
 
-<!-- VARIABLE EXAMPLES -->
+<!-- VARIABLES -->
 ## Variables
 
 | Variable | Description | Default | Required|
 |----------|-------------|---------|---------|
 |CLIENT_ID|Spotify client_id from the [Spotify Developer Dashboard](https://developer.spotify.com/dashboard/applications)|None|Yes|
+|CLIENT_SECRET|Spotify client_secret from the [Spotify Developer Dashboard](https://developer.spotify.com/dashboard/applications)|None|Yes|
+|PLAYLIST_ID|The Spotify playlist to watch. **!!Must be public!!**|None|Yes|
+|WEBHOOK_URL_TEMPLATE|URL to call when a new item is added. Supports $variable replacement|None|Yes|
+|WEBHOOK_METHOD|HTTP Method for the Webhook. Supports `GET`, `PUT`, or `POST`|`POST`|Yes|
+|WEBHOOK_CONTENT_TYPE|Content-Type of the Webhook. Supports `JSON` or `FORM`|`JSON`|Yes|
+|WEBHOOK_BODY_TEMPLATE|Optional HTTP body for the Webhook. Supports $variable replacement|None|No|
+|DELAY_AMOUNT|**Docker/Standalone** Integer of time to wait between checks|`5`|No|
+|DELAY_UNIT|**Docker/Standalone** Time Unit to wait between checks. Supports `HOURS`, `MINUTES`, or `SECONDS`|`MINUTES`|No|
+|DEBUG|Show debug logging|`False`|No|
 
 
+
+
+<!-- VARIABLE SUBSTITUTION -->
+## Variable Substitution
+> Not to be confused with Variables above
+
+For `WEBHOOK_URL_TEMPLATE` and `WEBHOOK_BODY_TEMPLATE`, you can add values from the new Spotify item on the playlist. 
+Simply add `$variable` on your string from the list below, and the script will replace it before making the Webhook call.
+
+|Variable|Description|
+|--------|-----------|
+|$track_id|Spotify Track ID|
+|$track_name|Track Name|
+|$track_number|Track Number in Album|
+|$track_duration|Track Duration|
+|$artist_id|Spotify Artist ID|
+|$artist_name|Artist Name|
+|$album_id|Spotify Album ID|
+|$album_name|Album Name|
+|$album_type|Album Type (`album`, `single`, `compilation`)
+
+### Example
+```
+http://awesome.webhook.com/notify?title=$track_name&artist=$artist_name
+```|
 
 <!-- ROADMAP -->
 ## Roadmap
