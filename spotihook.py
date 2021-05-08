@@ -47,6 +47,7 @@ def spotihook():
                 # Format: 2021-05-07T03:04:24Z
                 if datetime.strptime(item['added_at'], '%Y-%m-%dT%H:%M:%SZ') > last_sync:
                     print(f"New track found: {item['track']['artists'][0]['name']} - {item['track']['name']}")
+                    if DEBUG: print(item)
 
                     # Add Spotify data to data dict
                     data = {}
@@ -59,6 +60,7 @@ def spotihook():
                     data['album_id'] = item['track']['album']['id']
                     data['album_name'] = item['track']['album']['name']
                     data['album_type'] = item['track']['album']['album_type']
+                    data['album_artwork_url'] = item['track']['album']['images'][0]
                     if 'isrc' in item['track']['external_ids']: data['isrc'] = item['track']['external_ids']['isrc']
 
                     # Submit Webhook Request

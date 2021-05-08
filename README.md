@@ -109,7 +109,8 @@ Simply add `$variable` on your string from the list below, and the script will r
 |$artist_name|Artist Name|
 |$album_id|Spotify Album ID|
 |$album_name|Album Name|
-|$album_type|Album Type (`album`, `single`, `compilation`)
+|$album_type|Album Type (`album`, `single`, `compilation`)|
+|$album_artwork_url|Album Artwork URL|
 
 ### Example
 ```
